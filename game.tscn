@@ -1,0 +1,162 @@
+[gd_scene load_steps=15 format=3 uid="uid://dqbdkfleeyfn3"]
+
+[ext_resource type="Script" path="res://logic/game.gd" id="1_aht6t"]
+[ext_resource type="Texture2D" uid="uid://cvx3woxdp3mia" path="res://separator.png" id="1_vq35h"]
+[ext_resource type="Script" path="res://logic/paddle left.gd" id="2_q7gpj"]
+[ext_resource type="Script" path="res://logic/paddle right.gd" id="3_c8won"]
+[ext_resource type="Script" path="res://logic/Walls.gd" id="4_ml7wx"]
+[ext_resource type="Script" path="res://logic/Ball.gd" id="5_s76qr"]
+[ext_resource type="Script" path="res://logic/Bounds.gd" id="6_f5plu"]
+[ext_resource type="AudioStream" uid="uid://dcx1g1h22dwq" path="res://Pong Sound Effect 2.mp3" id="6_sqdut"]
+[ext_resource type="AudioStream" uid="uid://d1hlkcwn1kr88" path="res://Pong Sound Effect 1.mp3" id="7_1e8ef"]
+[ext_resource type="AudioStream" uid="uid://de4kvcgngahgu" path="res://Pong Sound Effect Score.mp3" id="8_goa0s"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ybxjx"]
+size = Vector2(27, 132)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e7uen"]
+size = Vector2(1168.5, 39)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lrujn"]
+radius = 14.0357
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y3w3o"]
+size = Vector2(20, 129.718)
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_aht6t")
+
+[node name="Paddles" type="Node2D" parent="."]
+
+[node name="Paddle Left" type="Area2D" parent="Paddles"]
+position = Vector2(26, 270)
+script = ExtResource("2_q7gpj")
+
+[node name="ColorRect" type="ColorRect" parent="Paddles/Paddle Left"]
+offset_right = 27.0
+offset_bottom = 134.0
+metadata/_edit_use_anchors_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Paddles/Paddle Left"]
+visible = false
+position = Vector2(13.5, 67)
+shape = SubResource("RectangleShape2D_ybxjx")
+
+[node name="Paddle Right" type="Area2D" parent="Paddles"]
+position = Vector2(1102, 270)
+script = ExtResource("3_c8won")
+
+[node name="ColorRect" type="ColorRect" parent="Paddles/Paddle Right"]
+offset_right = 27.0
+offset_bottom = 134.0
+metadata/_edit_use_anchors_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Paddles/Paddle Right"]
+visible = false
+position = Vector2(13.5, 67)
+shape = SubResource("RectangleShape2D_ybxjx")
+
+[node name="Walls" type="Area2D" parent="."]
+script = ExtResource("4_ml7wx")
+
+[node name="Upper" type="ColorRect" parent="Walls"]
+offset_left = -4.0
+offset_right = 1160.0
+offset_bottom = 19.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls"]
+visible = false
+position = Vector2(577.5, -1)
+shape = SubResource("RectangleShape2D_e7uen")
+
+[node name="Lower" type="ColorRect" parent="Walls"]
+offset_left = -4.0
+offset_top = 629.0
+offset_right = 1160.0
+offset_bottom = 648.0
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls"]
+visible = false
+position = Vector2(577.25, 649)
+shape = SubResource("RectangleShape2D_e7uen")
+
+[node name="Ball" type="Area2D" parent="."]
+position = Vector2(573, 321)
+script = ExtResource("5_s76qr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ball"]
+shape = SubResource("CircleShape2D_lrujn")
+
+[node name="ColorRect" type="ColorRect" parent="Ball"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.0
+offset_top = -11.0
+offset_right = 11.0
+offset_bottom = 11.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="WallHit" type="AudioStreamPlayer2D" parent="Ball"]
+stream = ExtResource("6_sqdut")
+
+[node name="PaddleHit2" type="AudioStreamPlayer2D" parent="Ball"]
+stream = ExtResource("7_1e8ef")
+pitch_scale = 0.5
+
+[node name="PaddleHit" type="AudioStreamPlayer2D" parent="Ball"]
+stream = ExtResource("7_1e8ef")
+
+[node name="BallResetTimer" type="Timer" parent="Ball"]
+one_shot = true
+
+[node name="Bounds" type="Node2D" parent="."]
+script = ExtResource("6_f5plu")
+
+[node name="Rightbound" type="Area2D" parent="Bounds"]
+
+[node name="RightSide" type="CollisionShape2D" parent="Bounds/Rightbound"]
+visible = false
+position = Vector2(1214, 321)
+scale = Vector2(4.97, 4.97)
+shape = SubResource("RectangleShape2D_y3w3o")
+
+[node name="Leftbound" type="Area2D" parent="Bounds"]
+
+[node name="LeftSide" type="CollisionShape2D" parent="Bounds/Leftbound"]
+visible = false
+position = Vector2(-61, 322)
+scale = Vector2(4.97, 4.97)
+shape = SubResource("RectangleShape2D_y3w3o")
+
+[node name="Score" type="Label" parent="."]
+offset_left = 547.0
+offset_top = 30.0
+offset_right = 574.0
+offset_bottom = 56.0
+scale = Vector2(2, 2)
+text = "0  0"
+
+[node name="Separator" type="Sprite2D" parent="."]
+position = Vector2(573.36, 324)
+scale = Vector2(1.013, 1.53)
+texture = ExtResource("1_vq35h")
+
+[node name="ScoreSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_goa0s")
+
+[connection signal="_reset_ball" from="." to="Ball" method="_on_game_reset_ball"]
+[connection signal="area_entered" from="Paddles/Paddle Left" to="Paddles/Paddle Left" method="_on_area_entered"]
+[connection signal="area_entered" from="Paddles/Paddle Right" to="Paddles/Paddle Right" method="_on_area_entered"]
+[connection signal="area_entered" from="Walls" to="Walls" method="_on_area_entered"]
+[connection signal="area_entered" from="Ball" to="Ball" method="_on_area_entered"]
+[connection signal="timeout" from="Ball/BallResetTimer" to="Ball" method="_on_ball_reset_timer_timeout"]
+[connection signal="update_player_one_score" from="Bounds" to="." method="_on_bounds_update_player_one_score"]
+[connection signal="update_player_two_score" from="Bounds" to="." method="_on_bounds_update_player_two_score"]
+[connection signal="area_entered" from="Bounds/Rightbound" to="Bounds" method="_on_right_area_entered"]
+[connection signal="area_entered" from="Bounds/Leftbound" to="Bounds" method="_on_left_area_entered"]
